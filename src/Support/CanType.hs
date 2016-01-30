@@ -1,8 +1,6 @@
 {-# LANGUAGE TypeFamilies #-}
 module Support.CanType where
 
-import Control.Monad.Error()
-
 -- This is a simple routine meant to do the minimum amount of work to get the type of something
 class CanType a where
     type TypeOf a

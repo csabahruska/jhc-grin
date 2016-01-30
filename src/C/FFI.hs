@@ -42,11 +42,11 @@ instance Data.Binary.Binary FfiExport where
 	    Data.Binary.put ad
 	    Data.Binary.put ae
     get = do
-    aa <- get
-    ab <- get
-    ac <- get
-    ad <- get
-    ae <- get
-    return (FfiExport aa ab ac ad ae)
+      aa <- get
+      ab <- get
+      ac <- get
+      ad <- get
+      ae <- get
+      return (FfiExport aa ab ac ad ae)
 
 --  Imported from other files :-

@@ -175,7 +175,7 @@ instance Functor (GMap Atom) where
 instance Binary Atom where
     get = do
         x <- getWord8
-        bs <- getBytes (fromIntegral x)
+        bs <- getByteString (fromIntegral x)
         return $ toAtom bs
     put a = do
         let bs = fromAtom a
