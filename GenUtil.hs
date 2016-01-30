@@ -39,7 +39,7 @@ module GenUtil(
     isLeft,isRight,
     fst3,snd3,thd3,
     -- ** System routines
-    exitSuccess, System.exitFailure, epoch, lookupEnv,endOfTime,
+    exitSuccess, System.exitFailure, epoch, lookupEnv',endOfTime,
     -- ** Random routines
     repMaybe,
     liftT2, liftT3, liftT4,
@@ -128,7 +128,8 @@ import Prelude hiding (catch)
 import System.Random(StdGen, newStdGen, Random(randomR))
 import System.IO.Error (isDoesNotExistError)
 import System.Time
-import qualified System
+import qualified System.Environment as System
+import qualified System.Exit as System
 import qualified System.IO as IO
 
 {-# SPECIALIZE snub :: [String] -> [String] #-}
@@ -536,8 +537,8 @@ shellQuote ss = unwords (map f ss) where
 
 -- | looks up an enviornment variable and returns it in an arbitrary Monad rather
 -- than raising an exception if the variable is not set.
-lookupEnv :: Monad m => String -> IO (m String)
-lookupEnv s = catch (fmap return $ System.getEnv s) (\e -> if isDoesNotExistError e then return (fail (show e)) else ioError e)
+lookupEnv' :: Monad m => String -> IO (m String)
+lookupEnv' s = catch (fmap return $ System.getEnv s) (\e -> if isDoesNotExistError e then return (fail (show e)) else ioError e)
 
 {-# SPECIALIZE fmapLeft :: (a -> c) -> [(Either a b)] -> [(Either c b)] #-}
 fmapLeft :: Functor f => (a -> c) -> f (Either a b) -> f (Either c b)

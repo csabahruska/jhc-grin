@@ -35,8 +35,8 @@ forMn xs = forM (zip xs [0 :: Int .. ])
 shortenPath :: String -> IO String
 shortenPath x@('/':_) = do
     cd <- getCurrentDirectory
-    pwd <- lookupEnv "PWD"
-    h <- lookupEnv "HOME"
+    pwd <- lookupEnv' "PWD"
+    h <- lookupEnv' "HOME"
     let f d = do
             d <- d
             '/':rest <- getPrefix d x
