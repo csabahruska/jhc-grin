@@ -2,7 +2,7 @@
 module Cmm.Number(Number(..),toIntegral) where
 
 import Data.Binary
-import Ratio
+import Data.Ratio
 
 newtype Number = Number Rational
     deriving(Num,Eq,Ord,Binary,Real,Fractional,RealFrac,Enum)

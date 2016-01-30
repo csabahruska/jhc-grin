@@ -8,7 +8,7 @@ module Grin.Show(
     render
     ) where
 import Prelude hiding ((<$>))
-import Char
+import Data.Char
 import Control.Monad.Writer(tell,when,forM_,execWriter)
 import Data.Maybe
 import System.IO

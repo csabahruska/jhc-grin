@@ -119,15 +119,15 @@ module GenUtil(
     UniqueProducer(..)
     ) where
 
-import CPUTime
-import Char(isAlphaNum, isSpace, toLower, ord, chr)
+import System.CPUTime
+import Data.Char(isAlphaNum, isSpace, toLower, ord, chr)
 import Control.Exception
 import Data.List
-import Monad
+import Control.Monad
 import Prelude hiding (catch)
-import Random(StdGen, newStdGen, Random(randomR))
+import System.Random(StdGen, newStdGen, Random(randomR))
 import System.IO.Error (isDoesNotExistError)
-import Time
+import System.Time
 import qualified System
 import qualified System.IO as IO
 
@@ -344,19 +344,6 @@ repeatM x = sequence $ repeat x
 {- SPECIALIZE repeatM_ :: IO a -> IO () #-}
 repeatM_ :: Monad m => m a -> m ()
 repeatM_ x = sequence_ $ repeat x
-
-{-# RULES "replicateM/0" replicateM 0 = const (return []) #-}
-{-# RULES "replicateM_/0" replicateM_ 0 = const (return ()) #-}
-
-{-# INLINE replicateM #-}
-{- SPECIALIZE replicateM :: Int -> IO a -> IO [a] #-}
-replicateM :: Monad m => Int -> m a -> m [a]
-replicateM n x = sequence $ replicate n x
-
-{-# INLINE replicateM_ #-}
-{- SPECIALIZE replicateM_ :: Int -> IO a -> IO () #-}
-replicateM_ :: Monad m => Int -> m a -> m ()
-replicateM_ n x = sequence_ $ replicate n x
 
 -- | convert a maybe to an arbitrary failable monad
 maybeToMonad :: Monad m => Maybe a -> m a

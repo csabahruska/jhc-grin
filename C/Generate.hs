@@ -72,7 +72,7 @@ module C.Generate(
     voidStarType
     ) where
 import Prelude hiding ((<$>))
-import Char
+import Data.Char
 import Control.Monad
 import Control.Monad.RWS(RWS,MonadState(..),MonadWriter(..),MonadReader(..),runRWS,asks,MonadFix(..))
 import Control.Monad.Writer(censor, runWriter)
