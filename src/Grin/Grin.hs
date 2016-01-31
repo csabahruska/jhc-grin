@@ -130,13 +130,13 @@ data Exp =
     | Case      { expValue :: Val, expAlts :: [Lam] }                     -- ^ Case statement
     | Return    { expValues :: [Val] }                                    -- ^ Return a value
     | Error     { expError :: String, expType :: [Ty] }                   -- ^ Abort with an error message, non recoverably.
-    | Call      { expValue :: Val,
+    | Call      { expValue :: Val, -- unused
                   expArgs :: [Val],
                   expType :: [Ty],
                   expJump :: Bool,                                        -- ^ Jump is equivalent to a call except it deallocates the region it resides in before transfering control
                   expFuncProps :: FuncProps,
                   expInfo :: Info.Info }                                  -- ^ Call or jump to a callable
-    | NewRegion { expLam :: Lam, expInfo :: Info.Info }                   -- ^ create a new region and pass it to its argument
+    | NewRegion { expLam :: Lam, expInfo :: Info.Info } -- unused                  -- ^ create a new region and pass it to its argument
     | Alloc     { expValue :: Val,
                   expCount :: Val,
                   expRegion :: Val,
@@ -147,12 +147,12 @@ data Exp =
                   expIsNormal :: Bool,                                    -- ^ cache, True = definitely normal, False = maybe normal
                   expNonNormal :: Set.Set Atom,                           -- ^ cache, a superset of functions called in non-tail call position.
                   expInfo :: Info.Info }                                  -- ^ A let of local functions
-    | MkClosure { expValue :: Val,
+    | MkClosure { expValue :: Val, -- unused
                   expArgs :: [Val],
                   expRegion :: Val,
                   expType :: [Ty],
                   expInfo :: Info.Info }                   -- ^ create a closure
-    | MkCont    { expCont :: Lam,                          -- ^ the continuation routine
+    | MkCont    { expCont :: Lam, -- unused                         -- ^ the continuation routine
                   expLam :: Lam,                           -- ^ the computation that is passed the newly created computation
                   expInfo :: Info.Info }                   -- ^ Make a continuation, always allocated on region encompasing expLam
     | GcRoots   { expValues :: [Val],                  -- ^ add some new variables to the GC roots for a subcomputation
