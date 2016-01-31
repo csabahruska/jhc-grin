@@ -3,19 +3,18 @@
 
 name:                Grin
 version:             0.1.0.0
--- synopsis:            
--- description:         
+synopsis:            grin backend stripped out from jhc
+description:         Compiles grin to C or executable. Also includes the jhc rts.
 -- license:             
 license-file:        LICENSE
 author:              John Meacham
-maintainer:          csaba.hruska@gmail.com
+--maintainer:
 -- copyright:           
 -- category:            
 build-type:          Simple
--- extra-source-files:  
 cabal-version:       >=1.10
 
-Extra-Source-Files:
+extra-source-files:
   StringTable/StringTable_cbits.h
   StringTable/StringTable_cbits.c
 
