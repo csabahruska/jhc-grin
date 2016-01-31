@@ -1,5 +1,5 @@
 {-# LANGUAGE ViewPatterns #-}
-module Grin.Main(compileToGrin) where
+module Grin.Main(compileToGrin,compileGrinToC) where
 
 import Control.Monad
 import Data.List
@@ -54,10 +54,8 @@ fetchCompilerFlags = return (cc,args) where
     args = words (lup "cflags") ++ debug ++ optCCargs options  ++ boehmOpts ++ profileOpts
 
 {-# NOINLINE compileToGrin #-}
-compileToGrin prog = do
+compileToGrin x = do
     stats <- Stats.new
-    putProgressLn "Converting to Grin..."
-    x <- return undefined -- Grin.FromE.compile prog
     when verbose $ Stats.print "Grin" Stats.theStats
     wdump FD.GrinInitial $ do dumpGrin "initial" x
     x <- transformGrin simplifyParms x
@@ -95,7 +93,7 @@ compileToGrin prog = do
 --    x <- return $ twiddleGrin x
     x <- storeAnalyze x
     dumpFinalGrin x
-    compileGrinToC x
+    return x
 
 dumpFinalGrin grin = do
     wdump FD.GrinGraph $ do

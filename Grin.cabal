@@ -22,6 +22,19 @@ Extra-Source-Files:
 library
   exposed-modules:     Grin.Main
                        Grin.Grin
+                       Grin.DeadCode
+                       Grin.Devolve
+                       Grin.EvalInline
+                       Grin.HashConst
+                       Grin.Lint
+                       Grin.NodeAnalyze
+                       Grin.Noodle
+                       Grin.Optimize
+                       Grin.Show
+                       Grin.SSimplify
+                       Grin.StorageAnalysis
+                       Grin.Val
+                       Grin.Whiz
 
   other-modules:       FlagDump
                        FlagOpts
@@ -42,19 +55,6 @@ library
                        Doc.Pretty
                        Fixer.Fixer
                        Fixer.Supply
-                       Grin.DeadCode
-                       Grin.Devolve
-                       Grin.EvalInline
-                       Grin.HashConst
-                       Grin.Lint
-                       Grin.NodeAnalyze
-                       Grin.Noodle
-                       Grin.Optimize
-                       Grin.Show
-                       Grin.SSimplify
-                       Grin.StorageAnalysis
-                       Grin.Val
-                       Grin.Whiz
                        Info.Info
                        Name.Internals
                        Name.Name
@@ -111,6 +111,7 @@ library
   build-tools:         hsc2hs
   default-language:    Haskell98
   ghc-options:         -fno-warn-tabs
-  Include-Dirs:        src/StringTable
-  C-Sources:           src/StringTable/StringTable_cbits.c
+  include-dirs:        src/StringTable
+  c-sources:           src/StringTable/StringTable_cbits.c
+                       cbits/lookup3.c
 
