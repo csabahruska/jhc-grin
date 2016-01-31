@@ -34,6 +34,9 @@ module Stats(
     readStat
     ) where
 
+import Data.Binary
+import GHC.Generics (Generic)
+
 import Util.Std
 import Control.Monad.Reader
 import Control.Monad.Writer.Strict
@@ -92,7 +95,9 @@ draw (Node x ts0) = x : drawSubTrees ts0
 -- Pure varients
 
 newtype Stat = Stat IB.IntBag
-    deriving(Eq,Ord,Monoid)
+    deriving(Eq,Ord,Monoid,Generic)
+
+instance Binary Stat
 
 prependStat :: String -> Stat -> Stat
 prependStat name (Stat m) = Stat $ IB.fromList [ (fromAtom $ mappend (toAtom $ "{" ++ name ++ "}.")  (unsafeIntToAtom x),y) | (x,y) <- IB.toList m ]

@@ -53,6 +53,9 @@ module Grin.Grin(
     valIsNF
     ) where
 
+import Data.Binary
+import GHC.Generics (Generic)
+
 import Control.Monad.Identity
 import Data.Char
 import Data.Monoid(Monoid(..))
@@ -108,10 +111,10 @@ data BaseOp
     | NewRegister           -- create a new register
     | ReadRegister          -- read a register
     | WriteRegister         -- write to a register
-    deriving(Eq,Ord,Show)
+    deriving(Eq,Ord,Show,Generic)
 
 data Lam = [Val] :-> Exp
-    deriving(Eq,Ord,Show)
+    deriving(Eq,Ord,Show,Generic)
 
 data Exp =
      Exp :>>= Lam                                                         -- ^ Sequencing - the same as >>= for monads.
@@ -154,7 +157,7 @@ data Exp =
                   expInfo :: Info.Info }                   -- ^ Make a continuation, always allocated on region encompasing expLam
     | GcRoots   { expValues :: [Val],                  -- ^ add some new variables to the GC roots for a subcomputation
                   expBody :: Exp }
-    deriving(Eq,Show,Ord)
+    deriving(Eq,Show,Ord,Generic)
 
 data Val =
     NodeC !Tag [Val]          -- ^ Complete node, of type TyNode
@@ -166,7 +169,7 @@ data Val =
     | Index Val Val           -- ^ A pointer incremented some number of values (Index v 0) == v
     | Item Atom Ty            -- ^ Specific named thing. function, global, region, etc..
     | ValUnknown Ty           -- ^ Unknown or unimportant value
-    deriving(Eq,Ord)
+    deriving(Eq,Ord,Generic)
 
 data Ty =
     TyPtr Ty                     -- ^ pointer to a memory location which contains its argument
@@ -185,22 +188,22 @@ data Ty =
     | TyComplex Ty               -- ^ A complex version of a basic type
     | TyVector !Int Ty           -- ^ A vector of a basic type
     | TyUnknown                  -- ^ an unknown possibly undefined type, All of these must be eliminated by code generation
-    deriving(Eq,Ord)
+    deriving(Eq,Ord,Generic)
 
 data Callable = Continuation | Function | Closure | LocalFunction | Primitive'
-    deriving(Eq,Ord,Show)
+    deriving(Eq,Ord,Show,Generic)
 
 type Tag = Atom
 
 newtype Var = V Int
-    deriving(Eq,Ord,Enum)
+    deriving(Eq,Ord,Enum,Generic)
 
 data FuncDef = FuncDef {
     funcDefName  :: Atom,
     funcDefBody  :: Lam,
     funcDefCall  :: Val,
     funcDefProps :: FuncProps
-    } deriving(Eq,Ord,Show)
+    } deriving(Eq,Ord,Show,Generic)
 
 -- Type information table (TyEnv)
 
@@ -208,19 +211,19 @@ data TyThunk
     = TyNotThunk               -- ^ not the thunk
     | TyPApp (Maybe Ty) Atom   -- ^ can be applied to (possibly) an argument, and what results
     | TySusp Atom              -- ^ can be evaluated and calls what function
-    deriving(Eq,Show)
+    deriving(Eq,Show,Generic)
 
 data TyTy = TyTy {
     tySlots :: [Ty],
     tyReturn :: [Ty],
     tyThunk :: TyThunk,
     tySiblings :: Maybe [Atom]
-}
+} deriving Generic
 
 tyTy = TyTy { tySlots = [], tyReturn = [], tySiblings = Nothing, tyThunk = TyNotThunk }
 
 newtype TyEnv = TyEnv (GMap Atom TyTy)
-    deriving(Monoid)
+    deriving(Monoid,Generic)
 
 -- random utility values
 
@@ -264,7 +267,7 @@ data FuncProps = FuncProps {
     funcCreates :: Perhaps,      -- ^ function allocates memory and stores or returns it
     funcLoops   :: Perhaps       -- ^ function may loop
     }
-    deriving(Eq,Ord,Show)
+    deriving(Eq,Ord,Show,Generic)
 
 funcProps = FuncProps {
     funcInfo = mempty,
@@ -279,7 +282,7 @@ funcProps = FuncProps {
     }
 
 data Phase = PhaseInit | PostInlineEval | PostAeOptimize | PostDevolve
-    deriving(Show,Eq,Ord,Enum)
+    deriving(Show,Eq,Ord,Enum,Generic)
 
 phaseEvalInlined e = e >= PostInlineEval
 
@@ -292,7 +295,7 @@ data Grin = Grin {
     grinPartFunctions :: Set.Set Atom,
     grinStats :: !Stats.Stat,
     grinCafs :: [(Var,Val)]
-}
+} deriving Generic
 
 emptyGrin = Grin {
     grinEntryPoints = mempty,
@@ -731,3 +734,25 @@ newtype instance GSet Var = GSetVar (IntjectionSet Var)
     deriving(Monoid,IsEmpty,HasSize,Collection,Unionize,SetLike,Eq,Ord)
 newtype instance GMap Var v = GMapVar (IntjectionMap Var v)
     deriving(Monoid,IsEmpty,HasSize,Collection,Unionize,SetLike,MapLike,Eq,Ord)
+
+-- binary instance
+instance Binary a => Binary (GMap Atom a) where
+  put m = put $ toList m
+  get = fmap fromList get
+instance Binary Info.Info where
+  put _ = return ()
+  get = return mempty
+instance Binary BaseOp
+instance Binary FuncProps
+instance Binary Exp
+instance Binary Lam
+instance Binary FuncDef
+instance Binary Phase
+instance Binary Callable
+instance Binary TyThunk
+instance Binary TyEnv
+instance Binary TyTy
+instance Binary Ty
+instance Binary Val
+instance Binary Var
+instance Binary Grin

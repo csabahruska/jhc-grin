@@ -126,6 +126,8 @@ import Prelude hiding (lookup,map,filter,foldr,foldl,null)
 import Data.Bits
 import Data.Monoid (Monoid(..))
 
+import Data.Binary
+import GHC.Generics (Generic)
 
 
 #if __GLASGOW_HASKELL__ >= 503
@@ -181,6 +183,9 @@ m ! k    = find' k m
 data IntBag = Nil
               | Tip {-# UNPACK #-} !Key {-# UNPACK #-} !Int
               | Bin {-# UNPACK #-} !Prefix {-# UNPACK #-} !Mask !IntBag !IntBag
+  deriving Generic
+
+instance Binary IntBag
 
 type Prefix = Int
 type Mask   = Int

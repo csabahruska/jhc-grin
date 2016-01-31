@@ -1,5 +1,5 @@
 {-# LANGUAGE ViewPatterns #-}
-module Grin.Main2(compileToGrin) where
+module Grin.Main(compileToGrin) where
 
 import Control.Monad
 import Data.List
@@ -38,6 +38,7 @@ import qualified FlagDump as FD
 import qualified Stats
 
 import qualified FlagOpts as FO
+
 
 fetchCompilerFlags :: IO (FilePath,     -- ^ file path to compiler
                           [String])     -- ^ compiler arguments
