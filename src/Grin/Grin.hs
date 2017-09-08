@@ -526,7 +526,7 @@ instance FreeVars FuncProps (Set.Set Var) where
 instance FreeVars FuncProps (Set.Set Tag) where
     freeVars FuncProps { funcTags = fv } = fv
 
-instance FreeVars FuncProps a => FreeVars FuncDef a where
+instance (FreeVars FuncProps a, Monoid a) => FreeVars FuncDef a where
     freeVars fd = freeVars (funcDefProps fd)
 
 instance FreeVars Exp (Set.Set Var) where
