@@ -108,9 +108,9 @@ data BaseOp
     | GcTouch               -- touch a value, forcing the GC to hold onto it.
     | Coerce Ty             -- coerce one type to another, danger zone. This is for reflection/rts and not for integral conversions.
     | GcPush                -- push some pointers onto the GC stack, returning registers representing the values on the stack
-    | NewRegister           -- create a new register
-    | ReadRegister          -- read a register
-    | WriteRegister         -- write to a register
+    | NewRegister           -- create a new register  ; unused
+    | ReadRegister          -- read a register        ; unused
+    | WriteRegister         -- write to a register    ; unused
     deriving(Eq,Ord,Show,Generic)
 
 data Lam = [Val] :-> Exp
@@ -175,19 +175,21 @@ data Ty =
     TyPtr Ty                     -- ^ pointer to a memory location which contains its argument
     | TyNode                     -- ^ a whole node
     | TyINode                    -- ^ a whole possibly indirect node
-    | TyAttr Ty Ty               -- ^ attach an attribute to a type
-    | TyAnd Ty Ty                -- ^ boolean conjunction of types
-    | TyOr  Ty Ty                -- ^ boolean disjunction of types
+    | TyAttr Ty Ty               -- ^ attach an attribute to a type       ; unused
+    | TyAnd Ty Ty                -- ^ boolean conjunction of types        ; unused
+    | TyOr  Ty Ty                -- ^ boolean disjunction of types        ; unused
     | TyPrim Op.Ty               -- ^ a basic type
     | TyUnit                     -- ^ type of Unit
     | TyCall Callable [Ty] [Ty]  -- ^ something call,jump, or cut-to-able
     | TyRegion                   -- ^ a region
-    | TyGcContext                -- ^ the context for garbage collection
+    | TyGcContext                -- ^ the context for garbage collection  ; unused
     | TyRegister Ty              -- ^ a register contains a mutable value, the register itself cannot be addressed,
                                  --   hence they may not be returned from functions or passed as arguments.
-    | TyComplex Ty               -- ^ A complex version of a basic type
-    | TyVector !Int Ty           -- ^ A vector of a basic type
+                                 --                                       ; unused
+    | TyComplex Ty               -- ^ A complex version of a basic type   ; unused
+    | TyVector !Int Ty           -- ^ A vector of a basic type            ; unused
     | TyUnknown                  -- ^ an unknown possibly undefined type, All of these must be eliminated by code generation
+                                 --                                       ; unused
     deriving(Eq,Ord,Generic)
 
 data Callable = Continuation | Function | Closure | LocalFunction | Primitive'
