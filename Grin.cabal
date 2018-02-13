@@ -15,8 +15,8 @@ build-type:          Simple
 cabal-version:       >=1.10
 
 extra-source-files:
-  StringTable/StringTable_cbits.h
-  StringTable/StringTable_cbits.c
+  src/StringTable/StringTable_cbits.h
+  src/StringTable/StringTable_cbits.c
 
 library
   exposed-modules:     Grin.Main
